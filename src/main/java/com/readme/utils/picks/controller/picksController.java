@@ -1,4 +1,4 @@
-package com.readme.utils.controller;
+package com.readme.utils.picks.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/utils-service")
+@RequestMapping("/picks")
 @RequiredArgsConstructor
-public class utilsController {
+public class picksController {
 
     private final Environment env;
     @GetMapping("/health_check")
