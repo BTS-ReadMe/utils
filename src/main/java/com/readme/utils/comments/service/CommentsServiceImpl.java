@@ -30,5 +30,25 @@ public class CommentsServiceImpl implements CommentsService {
         commentsRepository.save(comments);
     }
 
+    @Override
+    public void updateComment(CommentsDto commentsDto) {
 
+        log.info(commentsDto.toString());
+
+        Comments comments = commentsRepository.findByIdAndUuid(commentsDto.getId(),
+                commentsDto.getUuid())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+
+        Comments updateComments = Comments.builder()
+            .id(comments.getId())
+            .content(commentsDto.getContent())
+            .episodesId(comments.getEpisodesId())
+            .novelsId(comments.getNovelsId())
+            .uuid(comments.getUuid())
+            .writer(comments.getWriter())
+            .build();
+
+        commentsRepository.save(updateComments);
+
+    }
 }

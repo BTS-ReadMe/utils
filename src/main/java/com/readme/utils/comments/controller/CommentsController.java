@@ -29,7 +29,12 @@ public class CommentsController {
         commentService.addComment(new CommentsDto(requestAddComments, uuid));
     }
 
+    @PutMapping("/{commentsId}")
+    public void updateComments(@RequestHeader("uuid") String uuid, @PathVariable Long commentsId,
+        @RequestBody RequestUpdateComments requestUpdateComments) {
 
+        commentService.updateComment(new CommentsDto(requestUpdateComments, commentsId, uuid));
+    }
 
 
 
