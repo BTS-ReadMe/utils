@@ -8,4 +8,6 @@ public interface CommentsService {
     void addComment(CommentsDto commentsDto);
 
     void updateComment(CommentsDto commentsDto);
+
+    void deleteComments(String uuid, Long commentsId);
 }

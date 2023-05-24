@@ -36,6 +36,13 @@ public class CommentsController {
         commentService.updateComment(new CommentsDto(requestUpdateComments, commentsId, uuid));
     }
 
+    @DeleteMapping("/{commentsId}")
+    public void deleteComments(@RequestHeader("uuid") String uuid, @PathVariable Long commentsId) {
+
+        commentService.deleteComments(uuid, commentsId);
+    }
+
+
 
 
 

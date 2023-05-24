@@ -51,4 +51,13 @@ public class CommentsServiceImpl implements CommentsService {
         commentsRepository.save(updateComments);
 
     }
+
+    @Override
+    public void deleteComments(String uuid, Long commentsId) {
+
+        commentsRepository.findByIdAndUuid(commentsId, uuid)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+
+        commentsRepository.deleteById(commentsId);
+    }
 }
