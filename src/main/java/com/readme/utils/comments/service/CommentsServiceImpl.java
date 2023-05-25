@@ -1,11 +1,20 @@
 package com.readme.utils.comments.service;
 
 import com.readme.utils.comments.dto.CommentsDto;
+import com.readme.utils.comments.dto.PaginationDto;
+import com.readme.utils.comments.dto.ResponseCommentsDto;
+import com.readme.utils.comments.dto.CommentsPaginationDto;
 import com.readme.utils.comments.model.Comments;
 import com.readme.utils.comments.repository.CommentsRepository;
-import javax.xml.stream.events.Comment;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -60,4 +69,66 @@ public class CommentsServiceImpl implements CommentsService {
 
         commentsRepository.deleteById(commentsId);
     }
+
+    @Override
+    public CommentsPaginationDto getCommentsByEpisodesId(String uuid, Long episodesId,
+        Pageable pageable) {
+
+        Page<Comments> commentsPage = commentsRepository.findAllByEpisodesIdOrderByCreateDateDesc(
+            episodesId, pageable);
+        List<ResponseCommentsDto> responseCommentsDtoList = new ArrayList<>();
+
+        commentsPage.forEach(comments -> {
+            boolean myComment = uuid.equals(comments.getUuid());
+            boolean recent = comments.getCreateDate().isAfter(LocalDateTime.now().minusDays(1));
+            ResponseCommentsDto responseCommentsDto = new ResponseCommentsDto(comments, myComment,
+                recent);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            responseCommentsDto.setFormattedDate(comments.getCreateDate().format(formatter));
+
+            responseCommentsDtoList.add(responseCommentsDto);
+        });
+
+        PaginationDto paginationDto = PaginationDto.builder()
+            .page(commentsPage.getNumber())
+            .size(commentsPage.getSize())
+            .totalElements(commentsPage.getTotalElements())
+            .totalPage(commentsPage.getTotalPages())
+            .build();
+
+        return new CommentsPaginationDto(responseCommentsDtoList, paginationDto);
+    }
+
+    @Override
+    public CommentsPaginationDto getCommentsByNovelsId(String uuid, Long novelsId,
+        Pageable pageable) {
+
+        Page<Comments> commentsPage = commentsRepository.findAllByNovelsIdOrderByCreateDateDesc(
+            novelsId, pageable);
+        List<ResponseCommentsDto> responseCommentsDtoList = new ArrayList<>();
+
+        commentsPage.forEach(comments -> {
+            boolean myComment = uuid.equals(comments.getUuid());
+            boolean recent = comments.getCreateDate().isAfter(LocalDateTime.now().minusDays(1));
+            ResponseCommentsDto responseCommentsDto = new ResponseCommentsDto(comments, myComment,
+                recent);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            responseCommentsDto.setFormattedDate(comments.getCreateDate().format(formatter));
+
+            responseCommentsDtoList.add(responseCommentsDto);
+        });
+
+        PaginationDto paginationDto = PaginationDto.builder()
+            .page(commentsPage.getNumber())
+            .size(commentsPage.getSize())
+            .totalElements(commentsPage.getTotalElements())
+            .totalPage(commentsPage.getTotalPages())
+            .build();
+
+        return new CommentsPaginationDto(responseCommentsDtoList, paginationDto);
+    }
+
+
 }
