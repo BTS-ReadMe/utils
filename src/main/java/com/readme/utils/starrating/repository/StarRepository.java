@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 public interface StarRepository extends JpaRepository<StarRating, Long> {
     boolean existsByUuidAndEpisodeId(String uuid, long episodeId);
 
+    boolean existsByEpisodeId(long episodeId);
+
     StarRating findByUuidAndEpisodeId(String uuid, long episodeId);
 
     @Query(value = "select avg(star_rating) from star_rating where episode_id = ?", nativeQuery = true)

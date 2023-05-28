@@ -34,7 +34,12 @@ public class StarServiceImpl implements StarService {
 
     @Override
     public ResponseStarRatingDto getStarRatingByEpisodeId(String uuid, long episodeId) {
-        Double starRating = starRepository.findAvgEpisodeIdByEpisodeId(episodeId);
+        Double starRating = 0.0;
+        if (starRepository.existsByEpisodeId(episodeId)) {
+            starRating = starRepository.findAvgEpisodeIdByEpisodeId(episodeId);
+            starRating = Math.round(starRating * 10.0) / 10.0;
+        }
+
         boolean rated = false;
 
         if (starRepository.existsByUuidAndEpisodeId(uuid, episodeId)) {
