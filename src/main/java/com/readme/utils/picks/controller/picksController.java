@@ -2,10 +2,13 @@ package com.readme.utils.picks.controller;
 
 import com.readme.utils.commonResponseObject.CommonResponseData;
 import com.readme.utils.picks.dto.PickDto;
+import com.readme.utils.picks.dto.PickPaginationDto;
 import com.readme.utils.picks.dto.ResponsePickDto;
 import com.readme.utils.picks.repository.PickRepository;
 import com.readme.utils.picks.requestObject.RequestPick;
 import com.readme.utils.picks.responseObject.ResponsePicks;
+import com.readme.utils.picks.responseObject.ResponsePicksPagination;
+import com.readme.utils.picks.responseObject.ResponsePicksPagination.Pagination;
 import com.readme.utils.picks.service.PickService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -36,12 +39,16 @@ public class picksController {
     }
 
     @GetMapping
-    public ResponseEntity<CommonResponseData<ResponsePicks>> getPicks(@RequestHeader("uuid") String uuid) {
+    public ResponseEntity<CommonResponseData<ResponsePicksPagination>> getPicks(
+        @RequestHeader("uuid") String uuid, @PageableDefault(size = 12) Pageable pageable) {
 
-        List<ResponsePickDto> responsePickDtoList = pickService.getPicks(uuid);
+        PickPaginationDto responsePickDtoList = pickService.getPicks(uuid, pageable);
 
-        return ResponseEntity.ok(new CommonResponseData(
-           responsePickDtoList.stream().map(ResponsePicks::new)
+        return ResponseEntity.ok(new CommonResponseData<>(
+           new ResponsePicksPagination(
+               responsePickDtoList.getContents().stream().map(ResponsePicks::new),
+               new Pagination(responsePickDtoList.getPaginationDto())
+           )
         ));
     }
 

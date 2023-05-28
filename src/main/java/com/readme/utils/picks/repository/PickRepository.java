@@ -13,5 +13,5 @@ public interface PickRepository extends JpaRepository<Pick, Long> {
 
     void deleteByNovelsIdAndUuid(long novelsId, String uuid);
 
-    List<Pick> findTop12ByUuidOrderByIdDesc(String uuid);
+    Page<Pick> findTop12ByUuidOrderByIdDesc(String uuid, Pageable pageable);
 }
