@@ -10,6 +10,9 @@ import com.readme.utils.picks.responseObject.ResponsePicks;
 import com.readme.utils.picks.responseObject.ResponsePicksPagination;
 import com.readme.utils.picks.responseObject.ResponsePicksPagination.Pagination;
 import com.readme.utils.picks.service.PickService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
@@ -30,6 +33,13 @@ public class picksController {
 
     private final PickService pickService;
 
+    @Operation(summary = "찜(좋아요) 등록/취소", description = "찜(좋아요) 기능 등록, 등록되있으면 취소", tags = {"찜(좋아요)"})
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+        @ApiResponse(responseCode = "404", description = "NOT FOUND"),
+        @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
     @PostMapping
     public void pickNovels(@RequestHeader("uuid") String uuid,
         @RequestBody RequestPick requestPick) {
@@ -38,6 +48,13 @@ public class picksController {
 
     }
 
+    @Operation(summary = "찜(좋아요) 목록 조회", description = "찜(좋아요) 목록 조회", tags = {"찜(좋아요)"})
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+        @ApiResponse(responseCode = "404", description = "NOT FOUND"),
+        @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
     @GetMapping
     public ResponseEntity<CommonResponseData<ResponsePicksPagination>> getPicks(
         @RequestHeader("uuid") String uuid, @PageableDefault(size = 12) Pageable pageable) {
