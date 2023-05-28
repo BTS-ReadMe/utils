@@ -6,6 +6,9 @@ import com.readme.utils.starrating.dto.StarRatingDto;
 import com.readme.utils.starrating.requestObject.RequestAddStar;
 import com.readme.utils.starrating.responseObject.ResponseStarRating;
 import com.readme.utils.starrating.service.StarService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +28,13 @@ public class StarController {
 
     private final StarService starService;
 
+    @Operation(summary = "별점 등록/수정", description = "별점 없으면 등록, 있으면 수정", tags = {"별점"})
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+        @ApiResponse(responseCode = "404", description = "NOT FOUND"),
+        @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
     @PostMapping
     public void addStarRating(@RequestHeader("uuid") String uuid,
         @RequestBody RequestAddStar requestAddStar) {
@@ -33,6 +43,13 @@ public class StarController {
 
     }
 
+    @Operation(summary = "에피소드별 별점 조회", description = "에피소드별 별점 조회", tags = {"별점"})
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+        @ApiResponse(responseCode = "404", description = "NOT FOUND"),
+        @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
     @GetMapping("/episode/{episodeId}")
     public ResponseEntity<CommonResponseData<ResponseStarRating>> getStarRatingByEpisodeId(
         @RequestHeader("uuid") String uuid, @PathVariable long episodeId) {
