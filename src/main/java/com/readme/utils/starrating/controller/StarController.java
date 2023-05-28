@@ -52,7 +52,7 @@ public class StarController {
     })
     @GetMapping("/episode/{episodeId}")
     public ResponseEntity<CommonResponseData<ResponseStarRating>> getStarRatingByEpisodeId(
-        @RequestHeader("uuid") String uuid, @PathVariable long episodeId) {
+        @RequestHeader(value = "uuid", required = false, defaultValue = "") String uuid, @PathVariable long episodeId) {
         ResponseStarRatingDto responseStarRatingDto = starService.getStarRatingByEpisodeId(uuid,
             episodeId);
 
