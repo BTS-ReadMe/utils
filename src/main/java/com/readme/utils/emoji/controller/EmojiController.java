@@ -3,7 +3,9 @@ package com.readme.utils.emoji.controller;
 import com.readme.utils.commonResponseObject.CommonResponseData;
 import com.readme.utils.emoji.dto.EmojiDto;
 import com.readme.utils.emoji.requestObject.RequestAddEmoji;
+import com.readme.utils.emoji.responseObject.ResponseEmoji;
 import com.readme.utils.emoji.service.EmojiService;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,12 +33,12 @@ public class EmojiController {
     }
 
     @GetMapping("/{episodeId}")
-    public ResponseEntity<CommonResponseData<Map>> getEmojiByEpisodeId(
+    public ResponseEntity<CommonResponseData<List<ResponseEmoji>>> getEmojiByEpisodeId(
         @RequestHeader("uuid") String uuid, @PathVariable Long episodeId) {
 
-        Map<Long, Map<String, Long>> emojiMap = emojiService.getEmojiByEpisodeId(uuid, episodeId);
+        List<ResponseEmoji> emojiList = emojiService.getEmojiByEpisodeId(uuid, episodeId);
 
-        return ResponseEntity.ok(new CommonResponseData<>(emojiMap));
+        return ResponseEntity.ok(new CommonResponseData<>(emojiList));
     }
 
 
