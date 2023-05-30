@@ -113,7 +113,6 @@ public class CommentsServiceImpl implements CommentsService {
             novelsId, pageable);
         List<ResponseCommentsDto> responseCommentsDtoList = new ArrayList<>();
 
-        ZoneId seoulZone = ZoneId.of("Asia/Seoul");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         commentsPage.forEach(comments -> {
@@ -122,7 +121,7 @@ public class CommentsServiceImpl implements CommentsService {
             ResponseCommentsDto responseCommentsDto = new ResponseCommentsDto(comments, myComment,
                 recent);
 
-            responseCommentsDto.setFormattedDate(comments.getCreateDate().atZone(seoulZone).format(formatter));
+            responseCommentsDto.setFormattedDate(comments.getCreateDate().format(formatter));
 
             responseCommentsDtoList.add(responseCommentsDto);
         });
