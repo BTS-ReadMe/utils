@@ -23,4 +23,5 @@ public interface EmojiRepository extends JpaRepository<Emoji, Long> {
         + "ORDER BY e.episodeRow")
     List<EmojiGroupDto> getEmojiGroups(@Param("episodeId") Long episodeId);
 
+
 }
