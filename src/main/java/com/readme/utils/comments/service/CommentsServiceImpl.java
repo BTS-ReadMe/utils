@@ -8,6 +8,7 @@ import com.readme.utils.comments.model.Comments;
 import com.readme.utils.comments.repository.CommentsRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,14 +79,18 @@ public class CommentsServiceImpl implements CommentsService {
             episodesId, pageable);
         List<ResponseCommentsDto> responseCommentsDtoList = new ArrayList<>();
 
+        ZoneId seoulZone = ZoneId.of("Asia/Seoul");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
         commentsPage.forEach(comments -> {
             boolean myComment = uuid.equals(comments.getUuid());
             boolean recent = comments.getCreateDate().isAfter(LocalDateTime.now().minusDays(1));
+
             ResponseCommentsDto responseCommentsDto = new ResponseCommentsDto(comments, myComment,
                 recent);
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            responseCommentsDto.setFormattedDate(comments.getCreateDate().format(formatter));
+            responseCommentsDto.setFormattedDate(
+                comments.getCreateDate().atZone(seoulZone).format(formatter));
 
             responseCommentsDtoList.add(responseCommentsDto);
         });
@@ -108,13 +113,14 @@ public class CommentsServiceImpl implements CommentsService {
             novelsId, pageable);
         List<ResponseCommentsDto> responseCommentsDtoList = new ArrayList<>();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
         commentsPage.forEach(comments -> {
             boolean myComment = uuid.equals(comments.getUuid());
             boolean recent = comments.getCreateDate().isAfter(LocalDateTime.now().minusDays(1));
             ResponseCommentsDto responseCommentsDto = new ResponseCommentsDto(comments, myComment,
                 recent);
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             responseCommentsDto.setFormattedDate(comments.getCreateDate().format(formatter));
 
             responseCommentsDtoList.add(responseCommentsDto);
