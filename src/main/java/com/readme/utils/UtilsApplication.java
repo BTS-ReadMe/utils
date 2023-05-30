@@ -11,7 +11,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class UtilsApplication {
 
 	public static void main(String[] args) {
+		setDefaultTimeZone();
 		SpringApplication.run(UtilsApplication.class, args);
 	}
 
+	private static void setDefaultTimeZone() {
+		java.util.TimeZone.setDefault(java.util.TimeZone.getTimeZone("Asia/Seoul"));
+	}
 }
