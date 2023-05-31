@@ -67,6 +67,13 @@ public class picksController {
         ));
     }
 
+    @Operation(summary = "소설별로 찜 했는지 체크", description = "찜 했는지 체크", tags = {"찜(좋아요)"})
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+        @ApiResponse(responseCode = "404", description = "NOT FOUND"),
+        @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
     @GetMapping("/{novelId}")
     public ResponseEntity<CommonResponseData<ResponsePickCheck>> checkPick(@PathVariable long novelId,
         @RequestHeader(value = "uuid", required = false, defaultValue = "") String uuid) {
