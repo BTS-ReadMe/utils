@@ -3,9 +3,8 @@ package com.readme.utils.picks.controller;
 import com.readme.utils.commonResponseObject.CommonResponseData;
 import com.readme.utils.picks.dto.PickDto;
 import com.readme.utils.picks.dto.PickPaginationDto;
-import com.readme.utils.picks.dto.ResponsePickDto;
-import com.readme.utils.picks.repository.PickRepository;
 import com.readme.utils.picks.requestObject.RequestPick;
+import com.readme.utils.picks.responseObject.ResponsePickCheck;
 import com.readme.utils.picks.responseObject.ResponsePicks;
 import com.readme.utils.picks.responseObject.ResponsePicksPagination;
 import com.readme.utils.picks.responseObject.ResponsePicksPagination.Pagination;
@@ -13,13 +12,12 @@ import com.readme.utils.picks.service.PickService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -62,11 +60,21 @@ public class picksController {
         PickPaginationDto responsePickDtoList = pickService.getPicks(uuid, pageable);
 
         return ResponseEntity.ok(new CommonResponseData<>(
-           new ResponsePicksPagination(
-               responsePickDtoList.getContents().stream().map(ResponsePicks::new),
-               new Pagination(responsePickDtoList.getPaginationDto())
-           )
+            new ResponsePicksPagination(
+                responsePickDtoList.getContents().stream().map(ResponsePicks::new),
+                new Pagination(responsePickDtoList.getPaginationDto())
+            )
         ));
     }
+
+    @GetMapping("/{novelId}")
+    public ResponseEntity<CommonResponseData<ResponsePickCheck>> checkPick(@PathVariable long novelId,
+        @RequestHeader(value = "uuid", required = false, defaultValue = "") String uuid) {
+
+        boolean checkPick = pickService.checkPick(novelId, uuid);
+
+        return ResponseEntity.ok(new CommonResponseData<>(new ResponsePickCheck(checkPick)));
+    }
+
 
 }
