@@ -34,6 +34,7 @@ public class CommentsServiceImpl implements CommentsService {
             .novelsId(commentsDto.getNovelsId())
             .content(commentsDto.getContent())
             .writer(commentsDto.getWriter())
+            .episodeTitle(commentsDto.getEpisodeTitle())
             .build();
 
         commentsRepository.save(comments);
@@ -55,6 +56,7 @@ public class CommentsServiceImpl implements CommentsService {
             .novelsId(comments.getNovelsId())
             .uuid(comments.getUuid())
             .writer(comments.getWriter())
+            .episodeTitle(comments.getEpisodeTitle())
             .build();
 
         commentsRepository.save(updateComments);
