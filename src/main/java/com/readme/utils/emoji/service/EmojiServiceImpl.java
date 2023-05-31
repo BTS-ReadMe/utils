@@ -66,18 +66,15 @@ public class EmojiServiceImpl implements EmojiService {
         List<ResponseEmoji> responseEmojiList = new ArrayList<>();
         resultMap.forEach((row, data) -> {
             ResponseEmoji responseEmoji = new ResponseEmoji(row, new ArrayList<>());
+
             if (emojiRepository.existsByUuidAndEpisodeIdAndEpisodeRow(uuid, episodeId, row.intValue())) {
                 Emoji userEmoji = emojiRepository.findByUuidAndEpisodeIdAndEpisodeRow(uuid, episodeId, row.intValue());
+
                 data.forEach((key, value) -> {
-                    if (key.equals(userEmoji.getEmoji().toString())) {
-                        ResponseEmojiDetail responseEmojiDetail = new ResponseEmojiDetail(
-                            Long.parseLong(key), true, value);
-                        responseEmoji.getEmoji().add(responseEmojiDetail);
-                    } else {
-                        ResponseEmojiDetail responseEmojiDetail = new ResponseEmojiDetail(
-                            Long.parseLong(key), false, value);
-                        responseEmoji.getEmoji().add(responseEmojiDetail);
-                    }
+                    boolean checked = key.equals(userEmoji.getEmoji().toString());
+                    ResponseEmojiDetail responseEmojiDetail = new ResponseEmojiDetail(
+                        Long.parseLong(key), checked, value);
+                    responseEmoji.getEmoji().add(responseEmojiDetail);
                 });
 
             } else {
