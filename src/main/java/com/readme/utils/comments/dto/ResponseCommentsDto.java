@@ -14,6 +14,7 @@ public class ResponseCommentsDto {
     private boolean myComment;
     private String createDate;
     private boolean recent;
+    private String episodeTitle;
 
     public ResponseCommentsDto(Comments comments, boolean myComment, boolean recent) {
         this.id = comments.getId();
@@ -24,6 +25,7 @@ public class ResponseCommentsDto {
         this.novelsId = comments.getNovelsId();
         this.myComment = myComment;
         this.recent = recent;
+        this.episodeTitle = comments.getEpisodeTitle();
     }
 
     public void setFormattedDate(String createDate) {

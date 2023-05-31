@@ -25,6 +25,7 @@ public class Comments extends BaseTimeEntity {
     private Long novelsId;
     private String writer;
     private String content;
+    private String episodeTitle;
 
 
 
