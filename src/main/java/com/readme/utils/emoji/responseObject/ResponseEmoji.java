@@ -24,11 +24,23 @@ public class ResponseEmoji {
         private long id;
         private boolean checked;
         private long count;
+        private String emoji;
 
         public ResponseEmojiDetail(long id, boolean checked, long count) {
+            String emojiType = "";
+            if (id == 1L) {
+                emojiType = "\uD83D\uDE00";
+            } else if (id == 2L) {
+                emojiType = "\uD83D\uDE02";
+            } else if (id == 3L) {
+                emojiType = "\uD83D\uDE28";
+            }
+
             this.id = id;
             this.checked = checked;
             this.count = count;
+            this.emoji = emojiType;
+
         }
     }
 }
