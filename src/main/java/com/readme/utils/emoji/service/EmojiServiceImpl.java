@@ -33,8 +33,11 @@ public class EmojiServiceImpl implements EmojiService {
 
             Emoji emoji = emojiRepository.findByUuidAndEpisodeIdAndEpisodeRow(emojiDto.getUuid(),
                 emojiDto.getEpisodeId(), emojiDto.getEpisodeRow());
-            emoji.setEmoji(emojiDto.getEmoji());
-            emojiRepository.save(emoji);
+            if (emoji.getEmoji() != emojiDto.getEmoji()) {
+                emoji.setEmoji(emojiDto.getEmoji());
+                emojiRepository.save(emoji);
+            }
+
         } else {
             Emoji emoji = new Emoji(emojiDto);
             emojiRepository.save(emoji);
