@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -23,7 +24,7 @@ public class EmojiServiceImpl implements EmojiService {
 
     private final EmojiRepository emojiRepository;
 
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public void addEmoji(EmojiDto emojiDto) {
 
@@ -40,7 +41,7 @@ public class EmojiServiceImpl implements EmojiService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true, isolation = Isolation.SERIALIZABLE)
     @Override
     public List<ResponseEmoji> getEmojiByEpisodeId(String uuid, Long episodeId) {
         List<EmojiGroupDto> list = emojiRepository.getEmojiGroups(episodeId);
