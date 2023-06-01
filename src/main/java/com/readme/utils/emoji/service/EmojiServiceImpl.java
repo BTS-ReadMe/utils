@@ -40,6 +40,7 @@ public class EmojiServiceImpl implements EmojiService {
         }
     }
 
+    @Transactional
     @Override
     public List<ResponseEmoji> getEmojiByEpisodeId(String uuid, Long episodeId) {
         List<EmojiGroupDto> list = emojiRepository.getEmojiGroups(episodeId);
