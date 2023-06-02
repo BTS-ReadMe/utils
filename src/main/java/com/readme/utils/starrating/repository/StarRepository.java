@@ -13,4 +13,7 @@ public interface StarRepository extends JpaRepository<StarRating, Long> {
 
     @Query(value = "select avg(star_rating) from star_rating where episode_id = ?", nativeQuery = true)
     Double findAvgEpisodeIdByEpisodeId(Long episodeId);
+
+    @Query(value = "select avg(star_rating) from star_rating where novel_id = ?", nativeQuery = true)
+    Double getStarRatingByNovelId(Long novelId);
 }

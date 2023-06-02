@@ -2,6 +2,7 @@ package com.readme.utils.starrating.service;
 
 import com.readme.utils.starrating.dto.ResponseStarRatingDto;
 import com.readme.utils.starrating.dto.StarRatingDto;
+import com.readme.utils.starrating.dto.StarRatingKafkaDto;
 import com.readme.utils.starrating.model.StarRating;
 import com.readme.utils.starrating.repository.StarRepository;
 import com.readme.utils.starrating.requestObject.RequestAddStar;
@@ -49,5 +50,15 @@ public class StarServiceImpl implements StarService {
         ResponseStarRatingDto responseStarRatingDto = new ResponseStarRatingDto(rated, starRating);
 
         return responseStarRatingDto;
+    }
+
+    @Override
+    public StarRatingKafkaDto getStarRatingByNovelId(long novelId) {
+        Double starRating = starRepository.getStarRatingByNovelId(novelId);
+
+        StarRatingKafkaDto starRatingKafkaDto
+            = new StarRatingKafkaDto(novelId, Math.round(starRating*10.0)/10.0);
+
+        return starRatingKafkaDto;
     }
 }

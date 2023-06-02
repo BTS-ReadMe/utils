@@ -3,6 +3,8 @@ package com.readme.utils.starrating.controller;
 import com.readme.utils.commonResponseObject.CommonResponseData;
 import com.readme.utils.starrating.dto.ResponseStarRatingDto;
 import com.readme.utils.starrating.dto.StarRatingDto;
+import com.readme.utils.starrating.dto.StarRatingKafkaDto;
+import com.readme.utils.starrating.messagequeue.StarRatingKafkaProducer;
 import com.readme.utils.starrating.requestObject.RequestAddStar;
 import com.readme.utils.starrating.responseObject.ResponseStarRating;
 import com.readme.utils.starrating.service.StarService;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StarController {
 
     private final StarService starService;
+    private final StarRatingKafkaProducer starRatingKafkaProducer;
 
     @Operation(summary = "별점 등록/수정", description = "별점 없으면 등록, 있으면 수정", tags = {"별점"})
     @ApiResponses({
@@ -41,6 +44,12 @@ public class StarController {
 
         starService.addStarRating(new StarRatingDto(uuid, requestAddStar));
 
+        StarRatingKafkaDto starRatingKafkaDto
+            = starService.getStarRatingByNovelId(requestAddStar.getNovelId());
+
+        log.info(starRatingKafkaDto.toString());
+
+        starRatingKafkaProducer.updateStarRating("updateStarRating", starRatingKafkaDto);
     }
 
     @Operation(summary = "에피소드별 별점 조회", description = "에피소드별 별점 조회", tags = {"별점"})
