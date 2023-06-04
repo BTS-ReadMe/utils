@@ -36,6 +36,8 @@ public class EmojiServiceImpl implements EmojiService {
             if (emoji.getEmoji() != emojiDto.getEmoji()) {
                 emoji.setEmoji(emojiDto.getEmoji());
                 emojiRepository.save(emoji);
+            } else {
+                emojiRepository.deleteById(emoji.getId());
             }
 
         } else {
