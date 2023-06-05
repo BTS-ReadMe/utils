@@ -52,7 +52,7 @@ public class StarController {
         starRatingKafkaProducer.updateStarRating("updateStarRating", starRatingKafkaDto);
     }
 
-    @Operation(summary = "에피소드별 별점 조회", description = "에피소드별 별점 조회", tags = {"별점"})
+    @Operation(summary = "에피소드별 평균 별점 조회", description = "에피소드별 평균 별점 조회", tags = {"별점"})
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "OK"),
         @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
@@ -70,8 +70,4 @@ public class StarController {
         ));
     }
 
-//    @GetMapping("/novel/{novelId}")
-//    public void getStarRatingByNovelId() {
-//
-//    }
 }
