@@ -8,6 +8,7 @@ import com.readme.utils.emoji.responseObject.ResponseEmoji;
 import com.readme.utils.emoji.responseObject.ResponseEmoji.ResponseEmojiDetail;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +52,7 @@ public class EmojiServiceImpl implements EmojiService {
     public List<ResponseEmoji> getEmojiByEpisodeId(String uuid, Long episodeId) {
         List<EmojiGroupDto> list = emojiRepository.getEmojiGroups(episodeId);
 
-        Map<Long, Map<String, Long>> resultMap = new HashMap<>();
+        Map<Long, Map<String, Long>> resultMap = new LinkedHashMap<>();
 
         list.forEach(emojiGroupDto -> {
             Map<String, Long> map = new HashMap<>();
