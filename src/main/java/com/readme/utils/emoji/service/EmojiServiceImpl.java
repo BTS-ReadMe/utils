@@ -6,6 +6,7 @@ import com.readme.utils.emoji.model.Emoji;
 import com.readme.utils.emoji.repository.EmojiRepository;
 import com.readme.utils.emoji.responseObject.ResponseEmoji;
 import com.readme.utils.emoji.responseObject.ResponseEmoji.ResponseEmojiDetail;
+import com.readme.utils.messagequeue.EmojiStatusProducer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -13,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class EmojiServiceImpl implements EmojiService {
 
     private final EmojiRepository emojiRepository;
+    private final EmojiStatusProducer emojiStatusProducer;
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
@@ -37,6 +38,8 @@ public class EmojiServiceImpl implements EmojiService {
             if (emoji.getEmoji() != emojiDto.getEmoji()) {
                 emoji.setEmoji(emojiDto.getEmoji());
                 emojiRepository.save(emoji);
+                emojiStatusProducer.sendEmojiStatus(emojiDto.getEpisodeId(), emojiDto.getEpisodeRow(),
+                    emojiDto.getEmoji());
             } else {
                 emojiRepository.deleteById(emoji.getId());
             }
@@ -44,6 +47,8 @@ public class EmojiServiceImpl implements EmojiService {
         } else {
             Emoji emoji = new Emoji(emojiDto);
             emojiRepository.save(emoji);
+            emojiStatusProducer.sendEmojiStatus(emojiDto.getEpisodeId(), emojiDto.getEpisodeRow(),
+                emojiDto.getEmoji());
         }
     }
 
@@ -59,14 +64,14 @@ public class EmojiServiceImpl implements EmojiService {
             map.put("1", 0L);
             map.put("2", 0L);
             map.put("3", 0L);
-            resultMap.put((long)emojiGroupDto.getEpisodeRow(), map);
+            resultMap.put((long) emojiGroupDto.getEpisodeRow(), map);
 
         });
 
         list.forEach(emojiGroupDto -> {
             String key = Integer.toString(emojiGroupDto.getEmoji());
             Long value = emojiGroupDto.getCount();
-            resultMap.get((long)emojiGroupDto.getEpisodeRow()).merge(key, value, Long::sum);
+            resultMap.get((long) emojiGroupDto.getEpisodeRow()).merge(key, value, Long::sum);
         });
 
         log.info("결과!!! : " + resultMap);
@@ -75,8 +80,10 @@ public class EmojiServiceImpl implements EmojiService {
         resultMap.forEach((row, data) -> {
             ResponseEmoji responseEmoji = new ResponseEmoji(row, new ArrayList<>());
 
-            if (emojiRepository.existsByUuidAndEpisodeIdAndEpisodeRow(uuid, episodeId, row.intValue())) {
-                Emoji userEmoji = emojiRepository.findByUuidAndEpisodeIdAndEpisodeRow(uuid, episodeId, row.intValue());
+            if (emojiRepository.existsByUuidAndEpisodeIdAndEpisodeRow(uuid, episodeId,
+                row.intValue())) {
+                Emoji userEmoji = emojiRepository.findByUuidAndEpisodeIdAndEpisodeRow(uuid,
+                    episodeId, row.intValue());
 
                 data.forEach((key, value) -> {
                     boolean checked = key.equals(userEmoji.getEmoji().toString());
@@ -87,7 +94,8 @@ public class EmojiServiceImpl implements EmojiService {
 
             } else {
                 data.forEach((key, value) -> {
-                    ResponseEmojiDetail responseEmojiDetail = new ResponseEmojiDetail(Long.parseLong(key), false, value);
+                    ResponseEmojiDetail responseEmojiDetail = new ResponseEmojiDetail(
+                        Long.parseLong(key), false, value);
                     responseEmoji.getEmoji().add(responseEmojiDetail);
 
                 });
@@ -95,7 +103,6 @@ public class EmojiServiceImpl implements EmojiService {
 
             responseEmojiList.add(responseEmoji);
         });
-
 
         return responseEmojiList;
     }
