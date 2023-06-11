@@ -50,7 +50,9 @@ public class StarServiceImpl implements StarService {
             myRating = Math.round(myStarRating.getStarRating()*10.0)/10.0;
         }
 
-        ResponseStarRatingDto responseStarRatingDto = new ResponseStarRatingDto(rated, starRating, myRating);
+        ResponseStarRatingDto responseStarRatingDto
+            = new ResponseStarRatingDto(rated, Double.parseDouble(String.format("%.1f", starRating))
+            , Double.parseDouble(String.format("%.1f", myRating)));
 
         return responseStarRatingDto;
     }
