@@ -9,5 +9,5 @@ public class RequestAddComments {
      private String content;
      private long episodesId;
      private long novelsId;
-
+     private String episodeTitle;
 }

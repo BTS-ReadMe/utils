@@ -36,6 +36,7 @@ public class StarServiceImpl implements StarService {
     @Override
     public ResponseStarRatingDto getStarRatingByEpisodeId(String uuid, long episodeId) {
         Double starRating = 0.0;
+        Double myRating = 0.0;
         if (starRepository.existsByEpisodeId(episodeId)) {
             starRating = starRepository.findAvgEpisodeIdByEpisodeId(episodeId);
             starRating = Math.round(starRating * 10.0) / 10.0;
@@ -44,10 +45,14 @@ public class StarServiceImpl implements StarService {
         boolean rated = false;
 
         if (starRepository.existsByUuidAndEpisodeId(uuid, episodeId)) {
+            StarRating myStarRating = starRepository.findByUuidAndEpisodeId(uuid, episodeId);
             rated = true;
+            myRating = Math.round(myStarRating.getStarRating()*10.0)/10.0;
         }
 
-        ResponseStarRatingDto responseStarRatingDto = new ResponseStarRatingDto(rated, starRating);
+        ResponseStarRatingDto responseStarRatingDto
+            = new ResponseStarRatingDto(rated, Double.parseDouble(String.format("%.1f", starRating))
+            , Double.parseDouble(String.format("%.1f", myRating)));
 
         return responseStarRatingDto;
     }

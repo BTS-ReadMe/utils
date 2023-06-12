@@ -11,4 +11,6 @@ public interface PickService {
     void pickNovels(PickDto pickDto);
 
     PickPaginationDto getPicks(String uuid, Pageable pageable);
+
+    boolean checkPick(long novelId, String uuid);
 }

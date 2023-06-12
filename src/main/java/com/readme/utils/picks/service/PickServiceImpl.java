@@ -56,4 +56,9 @@ public class PickServiceImpl implements PickService {
 
         return pickPaginationDto;
     }
+
+    @Override
+    public boolean checkPick(long novelId, String uuid) {
+        return pickRepository.existsByNovelsIdAndUuid(novelId, uuid);
+    }
 }

@@ -14,6 +14,7 @@ public class ResponseComments {
     private boolean myComment;
     private String createDate;
     private boolean recent;
+    private String episodeTitle;
 
     public ResponseComments(ResponseCommentsDto responseCommentsDto) {
         this.id = responseCommentsDto.getId();
@@ -25,5 +26,6 @@ public class ResponseComments {
         this.myComment = responseCommentsDto.isMyComment();
         this.createDate = responseCommentsDto.getCreateDate();
         this.recent = responseCommentsDto.isRecent();
+        this.episodeTitle = responseCommentsDto.getEpisodeTitle();
     }
 }
