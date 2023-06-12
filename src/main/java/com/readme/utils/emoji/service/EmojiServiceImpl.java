@@ -38,12 +38,13 @@ public class EmojiServiceImpl implements EmojiService {
             if (emoji.getEmoji() != emojiDto.getEmoji()) {
                 emoji.setEmoji(emojiDto.getEmoji());
                 emojiRepository.save(emoji);
-                emojiStatusProducer.sendEmojiStatus(emojiDto.getEpisodeId(), emojiDto.getEpisodeRow(),
-                    emojiDto.getEmoji());
+
             } else {
                 emojiRepository.deleteById(emoji.getId());
-            }
 
+            }
+            emojiStatusProducer.sendEmojiStatus(emojiDto.getEpisodeId(), emojiDto.getEpisodeRow(),
+                emojiDto.getEmoji());
         } else {
             Emoji emoji = new Emoji(emojiDto);
             emojiRepository.save(emoji);
